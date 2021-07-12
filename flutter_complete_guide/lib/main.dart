@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './question.dart';
+import './answer.dart';
 
 // void main() {
 //   // Argument : MyApp Instance
@@ -30,10 +31,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // list
-    var questions = [
-      'What\'s your favorite color?',
-      'What\'s your favorite animal?'
+    // list and map
+    const questions = [
+      {
+        'questionText': 'What\'s your favorite color?',
+        'answers': ['Black', 'Red', 'Green', 'White'],
+      },
+      {
+        'questionText': 'What\'s your favorite animal?',
+        'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
+      },
+      {
+        'questionText': 'Who\'s your favorite instructor?',
+        'answers': ['Max', 'Jordan', 'Andrew', 'Virgil'],
+      },
     ];
     return MaterialApp(
       home: Scaffold(
@@ -43,18 +54,11 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           // Invisible Widget
           children: [
-            Question(questions[_questionIndex]),
-            RaisedButton(onPressed: _answerQuestion, child: Text('Answer 1')),
-            RaisedButton(
-                // Anonymous Function
-                onPressed: () => print('Answer 2 chosen!'),
-                child: Text('Answer 2')),
-            RaisedButton(
-                onPressed: () {
-                  // Anonymous Function
-                  print('Answer 3 chosen!');
-                },
-                child: Text('Answer 3')),
+            Question(questions[_questionIndex]['questionText'] as String),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
