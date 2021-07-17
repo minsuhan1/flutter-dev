@@ -37,10 +37,10 @@ void makeRequest() async {
             'https://dorm.cnu.ac.kr/intranet/user/corona19_daychkform.php'),
         body: {
           'mode': 'ins',
-          'yy': '2021',
-          'shtm': '3',
+          // 'yy': '2021',
+          // 'shtm': '3',
           'idno': '201902767',
-          'name': '',
+          // 'name': '',
           'q3': 'N', // 발열증상유무
           'q2': 'N', // 호흡기이상유무
           'memo': '', // 체온측정미실시사유
