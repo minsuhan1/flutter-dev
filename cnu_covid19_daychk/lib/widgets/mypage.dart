@@ -68,6 +68,7 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //print(_headers['Cookie']);
     return Container(
       child: Column(
         children: [
