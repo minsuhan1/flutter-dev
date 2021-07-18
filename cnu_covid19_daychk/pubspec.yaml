@@ -26,6 +26,7 @@ dependencies:
   http: ^0.13.3
   html: ^0.15.0
   cp949: ^1.2.1
+  dio: ^4.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
