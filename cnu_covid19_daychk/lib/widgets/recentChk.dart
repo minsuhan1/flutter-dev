@@ -107,6 +107,8 @@ class _RecentChkState extends State<RecentChk> {
           child: RefreshIndicator(
             onRefresh: _refreshRecentChecks,
             child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
               itemCount: _data.length,
               itemBuilder: (ctx, index) => Card(
                 elevation: 5,
