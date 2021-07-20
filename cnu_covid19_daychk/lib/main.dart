@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import './widgets/login.dart';
 import 'package:cp949/cp949.dart' as cp949;
 import 'package:flutter/cupertino.dart';
@@ -18,6 +22,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,4 +48,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
+
 }

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cnu_covid19_daychk/main.dart';
 import 'package:cnu_covid19_daychk/widgets/mypage.dart';
 import 'package:cp949/cp949.dart' as cp949;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
@@ -17,6 +19,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  late final FirebaseMessaging _messaging;
+
   void _showToast(BuildContext context, String message) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
@@ -28,9 +32,41 @@ class _LoginState extends State<Login> {
     );
   }
 
+  void registerNotification() async {
+    print('regis');
+    // 1. Initialize the Firebase app
+    await Firebase.initializeApp();
+
+    // 2. Instantiate Firebase Messaging
+    _messaging = FirebaseMessaging.instance;
+
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      // TODO: handle the received notifications
+      // For handling the received notifications
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        // Parse the message received
+        print('onMessage: $message');
+        PushNotification notification = PushNotification(
+          title: message.notification?.title,
+          body: message.notification?.body,
+        );
+      });
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
   var _storedId;
   var _storedPw;
-  bool _changeMod = false;
+  bool _changeMod = true;
   final _idController = TextEditingController();
   final _pwController = TextEditingController();
   Map<String, String> _headers = {}; // Client header
@@ -44,16 +80,20 @@ class _LoginState extends State<Login> {
 
   void _loadLoginInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userId') == '' || prefs.getString('userPw') == '') {
+    if (prefs.getString('userId') == null || prefs.getString('userPw') == null) {
       setState(() {
         _changeMod = true;
       });
       print(1);
     } else {
-      _storedId = (prefs.getString('userId'));
-      _storedPw = (prefs.getString('userPw'));
+      setState(() {
+        _storedId = (prefs.getString('userId'));
+        _storedPw = (prefs.getString('userPw'));
+        _changeMod = false;
+      });
       print('2');
       _loginRequest();
+      registerNotification();
     }
   }
 
@@ -203,4 +243,14 @@ class _LoginState extends State<Login> {
             ),
           );
   }
+}
+
+
+class PushNotification {
+  PushNotification({
+    this.title,
+    this.body,
+  });
+  String? title;
+  String? body;
 }

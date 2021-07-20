@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "741905595288",
+    "project_id": "cnu-dorm-covid19daychk",
+    "storage_bucket": "cnu-dorm-covid19daychk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741905595288:android:bd89a8b7a859c052ea09ed",
+        "android_client_info": {
+          "package_name": "com.example.cnu_covid19_daychk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741905595288-ma1n24q1slgab5t4cah306d3qnm2vhjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC15VItRVgdh8jSYK_trfSsgHvp0rQP_sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741905595288-ma1n24q1slgab5t4cah306d3qnm2vhjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

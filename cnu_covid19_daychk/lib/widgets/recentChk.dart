@@ -31,7 +31,6 @@ class _RecentChkState extends State<RecentChk> {
   Future<void> _refreshRecentChecks() =>
       Future.delayed(Duration(seconds: 1), () async {
         var _tmp = await _loadRecentChecks(context);
-        print(_tmp);
         setState(() => _data = _tmp);
       });
 
@@ -105,8 +104,8 @@ class _RecentChkState extends State<RecentChk> {
           padding: EdgeInsets.only(top: 30),
         ),
         Container(
-          padding: EdgeInsets.all(2),
           height: 550,
+          padding: EdgeInsets.all(2),
           child: RefreshIndicator(
             onRefresh: _refreshRecentChecks,
             child: ListView.builder(
