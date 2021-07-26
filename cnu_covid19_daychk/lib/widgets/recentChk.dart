@@ -104,7 +104,7 @@ class _RecentChkState extends State<RecentChk> {
           padding: EdgeInsets.only(top: 30),
         ),
         Container(
-          height: 550,
+          height: 540,
           padding: EdgeInsets.all(2),
           child: RefreshIndicator(
             onRefresh: _refreshRecentChecks,

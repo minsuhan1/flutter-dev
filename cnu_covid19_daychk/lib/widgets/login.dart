@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cnu_covid19_daychk/main.dart';
@@ -150,6 +151,8 @@ class _LoginState extends State<Login> {
         }
       } on SocketException catch (e) {
         _showToast(context, '인터넷 연결을 확인해 주세요');
+      } on TimeoutException catch (e) {
+        _showToast(context, '정보시스템 서버에 접속할 수 없습니다.');
       }
     } else {
       try {
@@ -189,6 +192,8 @@ class _LoginState extends State<Login> {
         }
       } on SocketException catch (e) {
         _showToast(context, '인터넷 연결을 확인해 주세요');
+      } on TimeoutException catch (e) {
+        _showToast(context, '정보시스템 서버에 접속할 수 없습니다.');
       }
     }
   }
