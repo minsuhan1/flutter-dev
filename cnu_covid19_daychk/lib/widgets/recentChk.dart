@@ -36,7 +36,7 @@ class _RecentChkState extends State<RecentChk> {
 
   Future<List<List<String>>> _loadRecentChecks(context) async {
     // 최근 자가진단 목록 불러오기
-    if(widget._headers['Cookie'] != null) {
+    if (widget._headers['Cookie'] != null) {
       try {
         final chk_response = await http
             .post(
@@ -90,56 +90,64 @@ class _RecentChkState extends State<RecentChk> {
 
   @override
   Widget build(BuildContext context) {
-    return widget._headers['Cookie'] != null ? Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          child: Text(
-            '제출현황(아래로 당겨서 새로고침)',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.indigo,
-            ),
-          ),
-          padding: EdgeInsets.only(top: 30),
-        ),
-        Container(
-          height: 540,
-          padding: EdgeInsets.all(2),
-          child: RefreshIndicator(
-            onRefresh: _refreshRecentChecks,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: _data.length,
-              itemBuilder: (ctx, index) => Card(
-                elevation: 5,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 20,
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: FittedBox(
-                        child: Text(_data[index][0]),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    _data[index][1],
+    return widget._headers['Cookie'] != null ? LayoutBuilder(
+        builder: (ctx, constraints) =>
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: constraints.maxHeight * 0.1,
+                  child: Text(
+                    '제출현황(아래로 당겨서 새로고침)',
                     style: TextStyle(
-                      fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.indigo,
                     ),
                   ),
-                  subtitle: Text(
-                    '발열증상 유무: ${_data[index][2]}, 이상증상 유무: ${_data[index][3]}',
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                Container(
+                  height: constraints.maxHeight * 0.9,
+                  padding: EdgeInsets.all(2),
+                  child: RefreshIndicator(
+                    onRefresh: _refreshRecentChecks,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: _data.length,
+                      itemBuilder: (ctx, index) =>
+                          Card(
+                            elevation: 5,
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 20,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: FittedBox(
+                                    child: Text(_data[index][0]),
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                _data[index][1],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '발열증상 유무: ${_data[index][2]}, 이상증상 유무: ${_data[index][3]}',
+                              ),
+                            ),
+                          ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ) : Container();
+              ],
+            )
+    ):
+        Container
+        (
+    );
   }
 }

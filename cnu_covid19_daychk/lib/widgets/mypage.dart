@@ -69,10 +69,11 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //print(_headers['Cookie']);
-    return Container(
-      child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
         children: [
           Container(
+            height: constraints.maxHeight * 0.10,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,16 +92,20 @@ class MyPage extends StatelessWidget {
               ],
             ),
           ),
-          RaisedButton(
-            child: Text(
-              '자가진단 제출',
-              style: TextStyle(fontWeight: FontWeight.bold),
+          Container(
+            height: constraints.maxHeight * 0.05,
+            child: RaisedButton(
+              child: Text(
+                '자가진단 제출',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              color: Theme.of(context).accentColor,
+              textColor: Colors.black,
+              onPressed: () => _submitForm(context),
             ),
-            color: Theme.of(context).accentColor,
-            textColor: Colors.black,
-            onPressed: () => _submitForm(context),
           ),
           Container(
+            height: constraints.maxHeight * 0.85,
             child: RecentChk(_storedId, _storedPw, _headers),
           )
         ],

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 
 import './widgets/login.dart';
 import 'package:cp949/cp949.dart' as cp949;
@@ -11,6 +12,12 @@ import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 
 main() {
+  // 가로모드 비활성화
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(MyApp());
 }
 
