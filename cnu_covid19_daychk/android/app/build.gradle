@@ -36,7 +36,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.cnu_covid19_daychk"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -50,6 +50,18 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    lintOptions {
+
+        checkReleaseBuilds false
+
+        // Or, if you prefer, you can continue to check for errors in release builds,
+
+        // but continue the build even when errors are found:
+
+        abortOnError false
+
+    }
+
 }
 
 flutter {

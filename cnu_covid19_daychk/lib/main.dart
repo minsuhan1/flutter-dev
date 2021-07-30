@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './widgets/login.dart';
-import 'package:cp949/cp949.dart' as cp949;
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 main() {
   // 가로모드 비활성화
@@ -18,7 +15,7 @@ main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitUp,
   ]);
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -29,11 +26,106 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    AgreeDialog();
+  }
+
+  void AgreeDialog() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('agree') != true || prefs.getBool('agree') == null) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('주의', style: TextStyle(fontWeight: FontWeight.bold),),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('이 앱을 사용함으로써 발생하는 모든 민,형사상 책임은 앱 사용자에게 있습니다.'),
+                  Text('코로나19 의심 증상이 있으면 반드시 정보시스템에 접속하여 자가진단 재제출을 하시기 바랍니다.'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                textColor: Colors.amber,
+                child: Text('동의', style: TextStyle(fontWeight: FontWeight.bold),),
+                onPressed: () {
+                  prefs.setBool('agree', true);
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                textColor: Colors.amber,
+                child: Text('앱 종료', style: TextStyle(fontWeight: FontWeight.bold),),
+                onPressed: () {
+                  exit(0);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      return;
+    }
+
+  }
+  void InfoDialog() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // 둥근 모서리
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          // Dialog Main Title
+          title: Column(
+            children: [
+              new Text(
+                "앱 및 개발자 정보",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("앱 버전: $version"),
+              Text(" "),
+              Text("[개발자]"),
+              Text("Email: trms7794han@gmail.com"),
+              Text("Github: @minsuhan1")
+            ],
+          ),
+          actions: [
+            new FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                textColor: Colors.purple,
+                child: new Text(
+                  "확인",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ))
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -44,6 +136,11 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('CNU Dorm 자가진단'),
+          actions: [
+            IconButton(
+                onPressed: () => InfoDialog(),
+                icon: Icon(Icons.info_outline))
+          ],
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -55,6 +152,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
-
 }

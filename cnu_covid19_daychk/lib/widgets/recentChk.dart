@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -40,10 +42,10 @@ class _RecentChkState extends State<RecentChk> {
       try {
         final chk_response = await http
             .post(
-          Uri.parse(
-              'https://dorm.cnu.ac.kr/intranet/user/corona19_daychk.php'),
-          headers: widget._headers, // Cookie 포함한 header
-        )
+              Uri.parse(
+                  'https://dorm.cnu.ac.kr/intranet/user/corona19_daychk.php'),
+              headers: widget._headers, // Cookie 포함한 header
+            )
             .timeout(Duration(seconds: 5));
 
         if (chk_response.statusCode == 200) {
@@ -72,6 +74,9 @@ class _RecentChkState extends State<RecentChk> {
       } on SocketException catch (e) {
         _showToast(context, '인터넷 연결을 확인해 주세요');
         return [];
+      } on TimeoutException catch (e) {
+        _showToast(context, '정보시스템 서버에 접속할 수 없습니다.');
+        return [];
       }
     }
     return [];
@@ -90,33 +95,33 @@ class _RecentChkState extends State<RecentChk> {
 
   @override
   Widget build(BuildContext context) {
-    return widget._headers['Cookie'] != null ? LayoutBuilder(
-        builder: (ctx, constraints) =>
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: constraints.maxHeight * 0.1,
-                  child: Text(
-                    '제출현황(아래로 당겨서 새로고침)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.indigo,
+    return widget._headers['Cookie'] != null
+        ? LayoutBuilder(
+            builder: (ctx, constraints) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: constraints.maxHeight * 0.1,
+                      child: Text(
+                        '제출현황(아래로 당겨서 새로고침)',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo,
+                        ),
+                      ),
+                      padding: EdgeInsets.only(top: 30),
                     ),
-                  ),
-                  padding: EdgeInsets.only(top: 30),
-                ),
-                Container(
-                  height: constraints.maxHeight * 0.9,
-                  padding: EdgeInsets.all(2),
-                  child: RefreshIndicator(
-                    onRefresh: _refreshRecentChecks,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: _data.length,
-                      itemBuilder: (ctx, index) =>
-                          Card(
+                    Container(
+                      height: constraints.maxHeight * 0.9,
+                      padding: EdgeInsets.all(2),
+                      child: RefreshIndicator(
+                        onRefresh: _refreshRecentChecks,
+                        child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: _data.length,
+                          itemBuilder: (ctx, index) => Card(
                             elevation: 5,
                             child: ListTile(
                               leading: CircleAvatar(
@@ -140,14 +145,13 @@ class _RecentChkState extends State<RecentChk> {
                               ),
                             ),
                           ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            )
-    ):
-        Container
-        (
+                  ],
+                ))
+        : Container(
+
     );
   }
 }

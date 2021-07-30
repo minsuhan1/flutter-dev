@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cnu_covid19_daychk">
    <application
-        android:label="cnu_covid19_daychk"
+        android:label="CNU Dorm 자가진단"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity">
