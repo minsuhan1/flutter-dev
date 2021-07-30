@@ -59,6 +59,7 @@ class MyPage extends StatelessWidget {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
+        duration: Duration(seconds: 1),
         content: Text(message),
         action: SnackBarAction(
             label: '확인', onPressed: scaffold.hideCurrentSnackBar),
@@ -69,46 +70,48 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //print(_headers['Cookie']);
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        children: [
-          Container(
-            height: constraints.maxHeight * 0.10,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('[로그인ID] ' + _storedId),
-                FlatButton(
-                  child: Text(
-                    '변경',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) => Column(
+          children: [
+            Container(
+              height: constraints.maxHeight * 0.10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('[로그인ID] ' + _storedId),
+                  FlatButton(
+                    child: Text(
+                      '변경',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  onPressed: _resetLoginInfo,
-                )
-              ],
-            ),
-          ),
-          Container(
-            height: constraints.maxHeight * 0.05,
-            child: RaisedButton(
-              child: Text(
-                '자가진단 제출',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                    onPressed: _resetLoginInfo,
+                  )
+                ],
               ),
-              color: Theme.of(context).accentColor,
-              textColor: Colors.black,
-              onPressed: () => _submitForm(context),
             ),
-          ),
-          Container(
-            height: constraints.maxHeight * 0.85,
-            child: RecentChk(_storedId, _storedPw, _headers),
-          )
-        ],
+            Container(
+              height: constraints.maxHeight * 0.05,
+              child: RaisedButton(
+                child: Text(
+                  '자가진단 제출',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                color: Theme.of(context).accentColor,
+                textColor: Colors.black,
+                onPressed: () => _submitForm(context),
+              ),
+            ),
+            Container(
+              height: constraints.maxHeight * 0.85,
+              child: RecentChk(_storedId, _storedPw, _headers),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -67,6 +67,7 @@ class _RecentChkState extends State<RecentChk> {
           //   data.add(element);
           // });
           print(ret_data);
+          _showToast(context, "제출현황 불러오기 완료");
           return ret_data;
           // print(cp949.decode(chk_response.bodyBytes)); // 한글이 깨지는 문제를 해결
         }
@@ -86,6 +87,7 @@ class _RecentChkState extends State<RecentChk> {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
+        duration: Duration(seconds: 1),
         content: Text(message),
         action: SnackBarAction(
             label: '확인', onPressed: scaffold.hideCurrentSnackBar),
@@ -96,62 +98,67 @@ class _RecentChkState extends State<RecentChk> {
   @override
   Widget build(BuildContext context) {
     return widget._headers['Cookie'] != null
-        ? LayoutBuilder(
-            builder: (ctx, constraints) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: constraints.maxHeight * 0.1,
-                      child: Text(
-                        '제출현황(아래로 당겨서 새로고침)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.indigo,
-                        ),
+        ? Scaffold(
+            body: LayoutBuilder(
+              builder: (ctx, constraints) => Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: constraints.maxHeight * 0.1,
+                    child: Text(
+                      '제출현황(아래로 당겨서 새로고침)',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo,
                       ),
-                      padding: EdgeInsets.only(top: 30),
                     ),
-                    Container(
-                      height: constraints.maxHeight * 0.9,
-                      padding: EdgeInsets.all(2),
-                      child: RefreshIndicator(
-                        onRefresh: _refreshRecentChecks,
-                        child: ListView.builder(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: _data.length,
-                          itemBuilder: (ctx, index) => Card(
-                            elevation: 5,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 20,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: FittedBox(
-                                    child: Text(_data[index][0]),
-                                  ),
+                    padding: EdgeInsets.only(top: 30),
+                  ),
+                  Container(
+                    height: constraints.maxHeight * 0.9,
+                    padding: EdgeInsets.all(2),
+                    child: RefreshIndicator(
+                      onRefresh: _refreshRecentChecks,
+                      child: ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: _data.length,
+                        itemBuilder: (ctx, index) => Card(
+                          elevation: 5,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 20,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: FittedBox(
+                                  child: Text(_data[index][0]),
                                 ),
                               ),
-                              title: Text(
-                                _data[index][1],
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            ),
+                            title: Text(
+                              _data[index][1],
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                              subtitle: Text(
-                                '발열증상 유무: ${_data[index][2]}, 이상증상 유무: ${_data[index][3]}',
-                              ),
+                            ),
+                            subtitle: Text(
+                              '발열증상 유무: ${_data[index][2]}, 이상증상 유무: ${_data[index][3]}',
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ))
-        : Container(
-
-    );
+                  ),
+                ],
+              ),
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _refreshRecentChecks,
+        child: Icon(Icons.refresh),
+      ),
+          )
+        : Container();
   }
 }

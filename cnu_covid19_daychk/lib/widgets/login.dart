@@ -26,6 +26,7 @@ class _LoginState extends State<Login> {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
+        duration: Duration(seconds: 1),
         content: Text(message),
         action: SnackBarAction(
             label: '확인', onPressed: scaffold.hideCurrentSnackBar),
