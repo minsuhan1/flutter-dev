@@ -10,8 +10,8 @@
 
 ## 사용법
 
-https://roadtodeveloper.tistory.com/104
+🔗 https://roadtodeveloper.tistory.com/104
 
 ## Latest Release
 
-<!--[**.apk download**](링크)-->
+<!--🔗 [**.apk download**](링크)-->
