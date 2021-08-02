@@ -14,4 +14,4 @@
 
 ## Latest Release
 
-<!--🔗 [**.apk download**](링크)-->
+<!--🔗 [**.apk download**](https://github.com/minsuhan1/flutter-dev/releases/latest/download/cnu_covid19_daychk.apk)-->
