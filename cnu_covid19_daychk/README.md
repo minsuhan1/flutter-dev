@@ -1,9 +1,10 @@
 # 충남대학교 기숙사 원터치 자가진단
-A new Flutter project.
+
 
 ## 사용법
 
-This project is a starting point for a Flutter application.
+https://roadtodeveloper.tistory.com/104
 
 ## Latest Release
 
+<!--[**.apk download**](링크)-->
