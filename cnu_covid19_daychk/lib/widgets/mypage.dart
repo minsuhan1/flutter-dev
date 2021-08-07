@@ -1,11 +1,9 @@
 import 'package:cnu_covid19_daychk/widgets/recentChk.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'dart:io';
 import 'package:cp949/cp949.dart' as cp949;
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPage extends StatefulWidget {
