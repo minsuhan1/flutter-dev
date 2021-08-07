@@ -6,14 +6,48 @@ import 'package:cp949/cp949.dart' as cp949;
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   final String _storedId;
   final String _storedPw;
   final VoidCallback _resetLoginInfo;
   final Map<String, String> _headers;
 
+
   MyPage(this._storedId, this._storedPw, this._resetLoginInfo, this._headers);
+
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  bool _notification = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadStoredNotiValue();
+  }
+
+  void _loadStoredNotiValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool('noti') == null || prefs.getBool('noti') == false) {
+      setState(() {
+        _notification = false;
+      });
+    } else if (prefs.getBool('noti') == true) {
+      setState(() {
+        _notification = true;
+      });
+    }
+  }
+
+  void _setStoredNotiValue(bool val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('noti', val);
+  }
 
   void _submitForm(BuildContext context) async {
     // 자가진단 제출
@@ -26,7 +60,7 @@ class MyPage extends StatelessWidget {
               'mode': 'ins',
               // 'yy': '2021',
               // 'shtm': '3',
-              'idno': _storedId,
+              'idno': widget._storedId,
               // 'name': '',
               'q3': 'N', // 발열증상유무
               'q2': 'N', // 호흡기이상유무
@@ -34,7 +68,7 @@ class MyPage extends StatelessWidget {
               'agree': 'Y', // 동의1
               'agree2': 'Y', // 동의2
             },
-            headers: _headers, // Cookie 포함한 header
+            headers: widget._headers, // Cookie 포함한 header
           )
           .timeout(Duration(seconds: 5));
 
@@ -75,12 +109,12 @@ class MyPage extends StatelessWidget {
         builder: (context, constraints) => Column(
           children: [
             Container(
-              height: constraints.maxHeight * 0.10,
+              height: constraints.maxHeight * 0.07,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('[로그인ID] ' + _storedId),
+                  Text('[로그인ID] ' + widget._storedId),
                   FlatButton(
                     child: Text(
                       '변경',
@@ -89,13 +123,37 @@ class MyPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: _resetLoginInfo,
+                    onPressed: widget._resetLoginInfo,
                   )
                 ],
               ),
             ),
             Container(
-              height: constraints.maxHeight * 0.05,
+              height: constraints.maxHeight * 0.07,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '알림 수신',
+                  ),
+                  Switch.adaptive(
+                    activeColor: Theme.of(context).primaryColor,
+                    value: _notification,
+                    onChanged: (val) {
+                      setState(() {
+                        _notification = val;
+                      });
+                      _setStoredNotiValue(val);
+                      if (val == true) {
+                        _showToast(context, "매일 오전 10시에 자가진단 제출 알림을 수신합니다.");
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: constraints.maxHeight * 0.06,
               child: RaisedButton(
                 child: Text(
                   '자가진단 제출',
@@ -107,8 +165,8 @@ class MyPage extends StatelessWidget {
               ),
             ),
             Container(
-              height: constraints.maxHeight * 0.85,
-              child: RecentChk(_storedId, _storedPw, _headers),
+              height: constraints.maxHeight * 0.80,
+              child: RecentChk(widget._storedId, widget._storedPw, widget._headers),
             )
           ],
         ),
