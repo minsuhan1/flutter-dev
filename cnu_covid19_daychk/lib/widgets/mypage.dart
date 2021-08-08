@@ -191,7 +191,8 @@ class _MyPageState extends State<MyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '알림 수신',
+                    '매일 오후 1시에 제출 알림 수신하기',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Switch.adaptive(
                     activeColor: Theme.of(context).primaryColor,
