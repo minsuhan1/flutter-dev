@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:cp949/cp949.dart' as cp949;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class MyPage extends StatefulWidget {
   final String _storedId;
@@ -99,6 +102,62 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  Future _scheduledAtTimeNotification() async {
+    print('noti scheduling function called');
+    final notiTitle = '자가진단 제출 알림';
+    final notiDesc = '앱에서 자가진단 결과를 제출해주세요';
+
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    // 아래는 iOS 알림 수신 권한 요청
+    // final result = await flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //     IOSFlutterLocalNotificationsPlugin>()
+    //     ?.requestPermissions(
+    //   alert: true,
+    //   badge: true,
+    //   sound: true,
+    // );
+
+    var android = AndroidNotificationDetails('id', notiTitle, notiDesc,
+        importance: Importance.max, priority: Priority.max);
+    var ios = IOSNotificationDetails();
+    var detail = NotificationDetails(android: android, iOS: ios);
+
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.deleteNotificationChannelGroup('id');
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      notiTitle,
+      notiDesc,
+      _setNotiTime(),
+      detail,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+
+  }
+
+  tz.TZDateTime _setNotiTime() {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+
+    final now = tz.TZDateTime.now(tz.local);
+    var scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day,
+        13, 0);
+    if(scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    print('schedule set');
+    return scheduledDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     //print(_headers['Cookie']);
@@ -143,7 +202,8 @@ class _MyPageState extends State<MyPage> {
                       });
                       _setStoredNotiValue(val);
                       if (val == true) {
-                        _showToast(context, "매일 오전 10시에 자가진단 제출 알림을 수신합니다.");
+                        _showToast(context, "매일 오후 1시에 자가진단 제출 알림을 수신합니다.");
+                        _scheduledAtTimeNotification();
                       }
                     },
                   ),

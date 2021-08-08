@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './widgets/login.dart';
@@ -8,14 +9,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
-main() {
+main() async {
   // 가로모드 비활성화
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitUp,
   ]);
+  _initNotiSetting();
+
   runApp(MaterialApp(home: MyApp()));
+}
+
+void _initNotiSetting() async {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final initSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final initSettingsIOS = IOSInitializationSettings(
+    requestSoundPermission: true,
+    requestBadgePermission: false,
+    requestAlertPermission: false,
+  );
+  final initSettings = InitializationSettings(
+    android: initSettingsAndroid,
+    iOS: initSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+  );
 }
 
 class MyApp extends StatefulWidget {
