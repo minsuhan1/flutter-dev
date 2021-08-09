@@ -28,4 +28,4 @@
 
 ## Latest Release
 
-🔗 [**.apk download**](https://github.com/minsuhan1/flutter-dev/releases/latest/download/cnu_covid19_daychk.apk)
+🔗 [**.apk download**](https://github.com/minsuhan1/flutter-dev/releases/download/v1.0.0/cnudorm_covid19_daychk.apk)
