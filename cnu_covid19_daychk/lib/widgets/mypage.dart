@@ -131,7 +131,7 @@ class _MyPageState extends State<MyPage> {
         ?.deleteNotificationChannelGroup('id');
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
+      0,  // Channel id = 0
       notiTitle,
       notiDesc,
       _setNotiTime(),
@@ -142,6 +142,13 @@ class _MyPageState extends State<MyPage> {
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
+  }
+
+  Future _cancelScheduledAtTimeNotification() async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.cancel(0);
+    _showToast(context, '알림 수신을 해제하였습니다.');
+    // 0 is channel id
   }
 
   tz.TZDateTime _setNotiTime() {
@@ -205,6 +212,8 @@ class _MyPageState extends State<MyPage> {
                       if (val == true) {
                         _showToast(context, "매일 오후 1시에 자가진단 제출 알림을 수신합니다.");
                         _scheduledAtTimeNotification();
+                      } else if (val == false) {
+                        _cancelScheduledAtTimeNotification();
                       }
                     },
                   ),
