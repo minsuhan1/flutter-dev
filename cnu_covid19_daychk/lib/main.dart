@@ -127,9 +127,8 @@ class _MyAppState extends State<MyApp> {
             children: [
               Text("앱 버전: $version"),
               Text(" "),
-              Text("[개발자]"),
-              Text("Email: trms7794han@gmail.com"),
-              Text("Github: @minsuhan1")
+              Text("[Contact]"),
+              Text("Email: msh050533@gmail.com"),
             ],
           ),
           actions: [
